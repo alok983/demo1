@@ -1,0 +1,268 @@
+<html>
+
+<head>
+  <h2>Students management system </h2>
+  <style type="text/css">
+    label{
+          width: 130px;
+          display: inline-block;
+    }
+    #marksSchema{
+         border-radius: 10px;
+         background:yellowgreen;
+         color:blue;
+         width: 300px;
+         padding: 4px;
+    }
+    h2{
+      text-align: center;
+    }
+
+  </style> 
+</head>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
+<script>
+
+  function addmarks() {
+    var myForm = document.getElementById('marksSchema');
+
+    var marksSchema = {
+      "SEMESTER": myForm.elements['SEMESTER'].value,
+      "STUDENTID": myForm.elements['STUDENTID'].value,
+      "MARKSOBTAINED": myForm.elements['MARKSOBTAINED'].value,
+      "COURSEID": myForm.elements['COURSEID'].value,
+      "SUBJECTID": myForm.elements['SUBJECTID'].value
+      
+    };
+
+    console.log("data", marksSchema);
+    $.ajax({
+      method: "POST",
+      url: "http://64.227.167.192:4016/addmarksDetails",
+      contentType: 'application/json',
+      data: JSON.stringify(marksSchema),
+
+      success: (result) => {
+        console.log("success", result);
+        alert(result.message);
+      },
+
+      error: (error) => {
+        console.log("error", error);
+      }
+    });
+
+  };
+
+  function getmarks()
+  {
+    var myform= document.getElementById('marksSchema');
+    var marksdetails = {
+       
+        "STUDENTID": myform.elements['STUDENTID'].value,
+      
+    };
+    console.log("marksdetails",marksdetails);
+    
+    $.ajax({
+      method: "GET",
+      url : "http://64.227.167.192:4016/getmarks",
+      data: marksdetails,
+      success : (result) => {
+          console.log("response json data:",result);
+        myform.STUDENTID.value= result.record.STUDENTID;
+        myform.SEMESTER.value= result.record.SEMESTER;
+        myform.SUBJECTID.value= result.record.SUBJECTID;
+        myform.MARKSOBTAINED.value= result.record.MARKSOBTAINED;
+        myform.COURSEID.value= result.record.COURSEID
+        alert (result.message);
+      },
+      error : (error) => {
+        console.log("2",error);
+      }
+    });
+  }
+  function updatemarks()
+  
+  {
+    console.log("UPDATING THE MARKS");
+    var myForm= document.getElementById('marksSchema');
+    var marksdetails = {
+      "STUDENTID": myForm.elements['STUDENTID'].value,
+      "SEMESTER": myForm.elements['SEMESTER'].value,
+      "MARKSOBTAINED": myForm.elements['MARKSOBTAINED'].value,
+      "COURSEID": myForm.elements['COURSEID'].value,
+      "SUBJECTID": myForm.elements['SUBJECTID'].value,
+    };
+    console.log("marksdetails", marksdetails);
+    
+    $.ajax({
+      method: "PUT",
+      url : "http://64.227.167.192:4016/updatemarks",
+      data:marksdetails,
+      success : (result) => {
+          console.log("response json data:",result);
+        myForm.STUDENTID.value= result.record.STUDENTID;
+        myForm.SEMESTER.value= result.record.SEMESTER;
+        myForm.SUBJECTID.value= result.record.SUBJECTID;
+        myForm.MARKSOBTAINED.value= result.record.MARKSOBTAINED;
+        myForm.COURSEID.value= result.record.COURSEID
+        alert (result.message);
+      },
+      error : (error) => {
+        console.log("2",error);
+      }
+    });
+}
+  function deletemarks()
+  {console.log("DELETING THE STUDENT");
+    var myform= document.getElementById('marksSchema');
+    var marksdetails = {
+            "STUDENTID": myform.elements['STUDENTID'].value
+                };
+    console.log("marksdetails",marksdetails);
+    
+    $.ajax({
+      method: "DELETE",
+      url : "http://64.227.167.192:4016/deletemarks",
+      data:marksdetails,
+    
+      success : (result) => {
+        console.log("response json data:",result);
+        myform.STUDENTID.value= result.record.STUDENTID;
+        myform.SEMESTER.value= result.record.SEMESTER;
+        myform.SUBJECTID.value= result.record.SUBJECTID;
+        myform.MARKSOBTAINED.value= result.record.MARKSOBTAINED;
+        myform.COURSEID.value= result.record.COURSEID
+        alert (result.message);
+        console.log("1",result);
+      },
+      error : (error) => {
+        console.log("2",error);
+      }
+    });
+  }
+
+  // function printmarks()
+  
+  // {
+ 
+  //   var myform= document.getElementById('marksSchema');
+  //   var studentdetails = {
+       
+  //       "SEMESTER": myform.elements['SEMESTER'].value,
+  //       "COURSEID": myform.elements['COURSEID'].value,
+      
+  //   };
+  //   console.log("studentdetails",studentdetails);
+    
+  //   $.ajax({
+  //     method: "GET",
+  //     url : "http://64.227.167.192:4016/semestermarkslist",
+  //     data: studentdetails,
+  //     success : (result) => {
+  //         console.log("response json data:",result);
+  //     //   myform.SL_NO.value= result.record.SL_NO;
+  //     //  myform.STUDENT_ID.value= result.record.STUDENT_ID;
+  //     //  myform.SUBJECT_ID.value= result.record.SUBJECT_ID;
+  //       myform.SEMESTER.value= result.record.SEMESTER;
+  //     //  myform.MARKS_OBTAINED.value= result.record.MARKS_OBTAINED;
+  //       myform.COURSEID.value= result.record.COURSEID
+  //       alert (result.message);
+  //     },
+  //     error : (error) => {
+  //       console.log("2",error);
+  //     }
+  //   });
+  //   window.print();
+  // }
+
+  function viewdeptmark()
+     {
+        
+       var myform= document.getElementById('marksSchema');
+       var studentdetails = {
+         
+         "SEMESTER" : myform.elements['SEMESTER'].value,
+         "COURSEID" : myform.elements['COURSEID'].value
+         
+       }
+       $.ajax({
+         method: "get",
+         url : "http://64.227.167.192:4016/Departmentwise",
+         data: studentdetails,
+         success : (result) => {
+                 console.log("response json data:",result); 
+                 myform.SEMESTER.value= result.record.SEMESTER;                
+                 myform.COURSEID.value= result.record.COURSEID;
+                 const myJSON = JSON.stringify(result);
+document.getElementById("demo").innerHTML = myJSON;
+                alert(result.message);
+         },
+         error : (error) => {
+           console.log("2",error);
+         }
+       });
+     }
+
+     function viewsemesterwisemark()
+     {
+        
+       var myform= document.getElementById('marksSchema');
+       var studentdetails = {
+         
+         "SEMESTER" : myform.elements['SEMESTER'].value
+        //  "COURSE_ID" : myform.elements['COURSE_ID'].value
+         
+       }
+       $.ajax({
+         method: "get",
+         url : "http://64.227.167.192:4016/semestermarkslist",
+         data: studentdetails,
+         success : (result) => {
+                 console.log("response json data:",result); 
+                 myform.SEMESTER.value= result.record.SEMESTER;                
+                //  myform.COURSE_ID.value= result.record.COURSE_ID;
+                 const myJSON = JSON.stringify(result);
+document.getElementById("demo").innerHTML = myJSON;
+                alert(result.message);
+         },
+         error : (error) => {
+           console.log("2",error);
+         }
+       });
+     }
+
+</script>
+
+<body>
+  <div>
+    <form id="marksSchema">
+
+      <label>STUDENTID</label><input type="text" id="STUDENTID"></br>
+      <label>SEMESTER</label><input type="text" id="SEMESTER"></br>
+      <label>COURSEID</label><input type="text" id="COURSEID"></br>
+      <label>SUBJECTID</label><input type="text" id="SUBJECTID"></br>
+      <label>MARKSOBTAINED</label><input type="text" id="MARKSOBTAINED"></br>
+      
+
+    </form>
+    <button onclick="addmarks()">add marks</button>
+
+    <button onclick="getmarks()">Get marks</button>
+
+    <button onclick= "viewdeptmark()">View Department Marks </button>
+
+    <button onclick= "viewsemesterwisemark()">View Semwise Marks </button>
+
+   <button INPUT TYPE=”button” onClick=history.go(0) VALUE=”Refresh”> Refresh </button>
+
+    <p><span id="demo"></span></p>
+
+  </div>
+
+</body>
+
+</html>
